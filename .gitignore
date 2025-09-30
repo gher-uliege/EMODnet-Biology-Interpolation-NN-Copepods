@@ -1,31 +1,4 @@
-# History files
-.Rhistory
-.Rapp.history
-
-# Session Data files
-.RData
-
-# RStudio files
-.Rproj.user/
-
-# Rendered reports
-product/*.html
-analysis/*.docx
-analysis/*.pdf
-docs/*.html
-docs/*.docx
-docs/*.pdf
-
-# output files
-output/
-
-# knitr and R markdown default cache directories
-/analysis/cache/
-/analysis/figures/
-
-# Temporary files created by R markdown
-*.utf8.md
-*.knit.md
-
-# RStudio
-.Rproj.user
+CPR_Data_DINCAE_290925.docx
+CPR_DataRequest_DINCAE_29Sep25.zip
+CPR_DINCAE_ControlMap_29092025.png
+CPR_DINCAE_Data_290925.csv
