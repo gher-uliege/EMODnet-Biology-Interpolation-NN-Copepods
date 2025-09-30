@@ -67,4 +67,5 @@ Available to download in:
 
 ### Authors
 
-Charles Troupin (ULiège), Pierre Helaouët (MBA)
+Charles Troupin (ULiège), Pierre Helaouët (MBA)      
+Copyright (c) 2025 ULiège (GHER)
