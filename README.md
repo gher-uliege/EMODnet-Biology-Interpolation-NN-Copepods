@@ -1,8 +1,13 @@
-# {{product_name}}
+# Gridded copepod abundance
 
 ## Introduction
 
-{{product_introduction}}
+Copepods are found everywhere in the ocean. They eat diatoms and phytoplankton, and constitute an essential link in the food web.
+Gridded maps are useful for data visualisation, but also to assess the change over long time periods.
+
+### The method
+
+To create the gridded maps we will rely on [`DINCAE`](https://github.com/gher-uliege/DINCAE.jl) (Data-Interpolating Convolutional Auto-Encoder), a neural network designed to reconstruct missing data in satellite images, but that can be adapted to grid sparse, in situ measurements. 
 
 ## Directory structure
 
@@ -45,6 +50,9 @@
 
 ### Citation and download link
 
+The input data should be cited as:
+> Pierre Helaouët (Marine Biological Association of the United Kingdom) (2025): CPR Data request - DINCAE - 29/09/2025. The Archive for Marine Species and Habitats Data (DASSH). (Dataset). https://doi.org/10.17031/68da4a97650f1
+
 This product should be cited as:
 
 {{product_citation}}
@@ -55,4 +63,4 @@ Available to download in:
 
 ### Authors
 
-{{product_authors}}
+Charles Troupin (ULiège), Pierre Helaouët (MBA)
