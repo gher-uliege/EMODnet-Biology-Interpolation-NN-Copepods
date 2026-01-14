@@ -19,6 +19,7 @@ To create the gridded maps we will rely on [`DINCAE`](https://github.com/gher-ul
 {{directory_name}}/
 ├── analysis
 ├── data/
+|   ├── aux_data/
 │   ├── derived_data/
 │   └── raw_data/
 ├── docs/
@@ -26,31 +27,37 @@ To create the gridded maps we will rely on [`DINCAE`](https://github.com/gher-ul
 └── scripts/
 ```
 
-* **analysis** - Markdown or Jupyter notebooks
-* **data** - Raw and derived data
+* **analysis** - Jupyter notebooks for the preparation of the input files and for the interpolation 
+* **data** - Raw data (CPR observations), auxiliary data (bathymetry, coastline, etc) and derived data (data files to be ingested by `DINCAE`)
 * **docs** - Rendered reports
-* **product** - Output product files
-* **scripts** - Reusable code
+* **product** - Output product files and figures
+* **scripts** - Reusable code (main module containing functions used in the **analysis**)
 
 ## Data series
 
-{{data_series}}
+Raw data have to be downloaded from https://doi.mba.ac.uk/data/3548/
 
+and then extracted in the corresponding directory (`./data/raw_data/`)
+```bash
+unzip CPR_DataRequest_DINCAE_29Sep25.zip
 ```
-{{data_wfs_request}}
-```
+
+Three files are obtained:
+1. CPR_Data_DINCAE_290925.docx: the documentation,
+2. CPR_DINCAE_ControlMap_29092025.png: a map representing the selected samples,
+3. CPR_DINCAE_Data_290925.csv: the selected samples.
 
 ## Data product
 
-{{data_product_description}}
-
+The data product consists of a netCDF file storing gridded fields for two variables: the _small copepods_ and the _large copepods_
+.
 ## More information:
 
 ### References
 
 ### Code and methodology
 
-{{link_code}}
+`DINCAE` software is available at https://github.com/gher-uliege/DINCAE.jl
 
 ### Citation and download link
 

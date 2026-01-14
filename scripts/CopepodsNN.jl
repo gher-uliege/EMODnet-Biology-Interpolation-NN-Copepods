@@ -9,8 +9,7 @@ using Interpolations
 using Statistics
 using Random
 using Distributions
-using GeoArrays
-using ImageFiltering
+# using GeoArrays
 using GeoJSON
 using PolygonOps
 using Downloads
