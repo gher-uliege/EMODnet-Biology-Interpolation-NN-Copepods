@@ -18,16 +18,8 @@ using cuDNN
 using DINCAE
 using Dates
 using NCDatasets
+include("./param.jl")
 
-domain = (-95, 27.5, 22.5, 79.0)
-Δext = 10.0
-Δlon = 1.0
-Δlat = 1.0
-domaincompute = domain .+ [-Δext, Δext, -Δext, Δext]
-yearmin = 1958
-yearmax = 2022
-fielddates_monthly = collect(Date(yearmin, 1, 15):Dates.Month(1):Date(yearmax, 12, 15));
-dataprocdir = "../data/derived_data/"
 
 
 #   Set the correct variable types
