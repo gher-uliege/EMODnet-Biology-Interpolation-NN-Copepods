@@ -17,6 +17,7 @@ using GeoDatasets
 using Makie 
 using CairoMakie
 using GeoMakie
+using DIVAnd
 
 juliaversion = "v1.12.4"
 
@@ -110,6 +111,34 @@ function edit_mask!(xi, yi, mask::BitMatrix, coordinatelist::Vector{Any})
         end
     end
     return nothing
+end
+
+
+"""
+    get_landsea_mask(domain)
+
+Return the land-sea mask corresponding to the region defined by `domain`.      
+The mask is used for plotting, for instance with the Julia command:
+```julia
+contourf!(ax, lon_landsea, lat_landsea, landsea, colormap = :binary, levels = 2)
+````
+"""
+function get_landsea_mask(domain::Tuple)
+    # Land/sea mask and coastline
+    lon_landsea, lat_landsea, landsea = GeoDatasets.landseamask(; resolution = 'i', grid = 2.5)
+    landsea[landsea.==2] .= 1;
+    landsea = Float64.(landsea)
+    landsea[landsea.==0] .= NaN;
+    
+    coordscoast = GeoDatasets.gshhg("i", 1);
+    
+    goodlon = findall((lon_landsea .<= domain[2]) .& (lon_landsea .>= domain[1]))
+    goodlat = findall((lat_landsea .<= domain[4]) .& (lat_landsea .>= domain[3]))
+    lon_landsea = lon_landsea[goodlon]
+    lat_landsea = lat_landsea[goodlat]
+    landsea = landsea[goodlon, goodlat];
+    landsea[isnan.(landsea)] .= -999.0;
+    return lon_landsea::Vector{Float64}, lat_landsea::Vector{Float64}, landsea::Matrix{Float64}
 end
 
 """
@@ -466,6 +495,24 @@ function read_data_nc(datafile::AbstractString)
         return lon::Vector{Float64}, lat::Vector{Float64}, dates::Vector{Date}, 
         observations::Vector{Float64}, obsid::Vector{Int64}, varname::AbstractString
     end
+end
+
+function read_data_nc(datafile::AbstractString, domain::Tuple)
+
+    lon, lat, dates, observations, obsid, varname = read_data_nc(datafile)
+    goodcoords = findall(
+        (lon .<= domain[2]) .&
+        (lon .>= domain[1]) .&
+        (lat .<= domain[4]) .&
+        (lat .>= domain[3]),
+    )
+
+    return lon[goodcoords]::Vector{Float64},
+    lat[goodcoords]::Vector{Float64},
+    dates[goodcoords]::Vector{Date},
+    observations[goodcoords]::Vector{Float64},
+    obsid[goodcoords]::Vector{Int64},
+    varname::AbstractString
 end
 
 
@@ -838,7 +885,7 @@ end
 
 Create a GeoAxis for the current figure `fig`
 """
-function create_geoaxis(fig::Figure; proj="+proj=merc", title="", ii=1, jj=1)    
+function create_geoaxis(fig::Figure; proj="+proj=merc", title="", ii=1, jj=1, longridvalid, latgridvalid)    
     ga = GeoAxis(fig[ii, jj],
     dest = proj,
     xgridstyle = :dashdot,
@@ -847,6 +894,8 @@ function create_geoaxis(fig::Figure; proj="+proj=merc", title="", ii=1, jj=1)
     ygridcolor = :grey,
     xticks = collect(-110:20:30),
     yticks = collect(10.0:10:80),
+    xminorticks = longridvalid,
+    yminorticks = latgridvalid,
     title = title
     )
 
