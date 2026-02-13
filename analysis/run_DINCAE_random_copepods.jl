@@ -18,7 +18,7 @@ using cuDNN
 using DINCAE
 using Dates
 using NCDatasets
-include("./param.jl")
+include("../scripts/param.jl")
 
 
 
@@ -60,6 +60,7 @@ grid = (domaincompute[1]:Δlon:domaincompute[2], domaincompute[3]:Δlat:domainco
 #   =======================
 
 inputfile = joinpath(dataprocdir, "Small_copepods_DINCAE.nc")
+inputfile = joinpath(dataprocdir, "Small_copepods_DINCAE_NortheastAtlantic_main.nc")
 
 # Create output directory
 # =======================
@@ -88,7 +89,7 @@ isdir(outputdir) ? @debug("already there") : mkpath(outputdir)
 # =========
 
 dateformat = "yyyymmddTHHMMSS"
-for iii = 1:40
+for iii = 1:2
     timestamp = Dates.format(Dates.now(), dateformat)
     paramdict = CopepodsNN.create_random_params()
     @info(" ")

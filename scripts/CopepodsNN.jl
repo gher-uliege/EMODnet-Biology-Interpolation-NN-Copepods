@@ -885,7 +885,7 @@ end
 
 Create a GeoAxis for the current figure `fig`
 """
-function create_geoaxis(fig::Figure; proj="+proj=merc", title="", ii=1, jj=1, longridvalid, latgridvalid)    
+function create_geoaxis(fig::Figure; proj="+proj=merc", title="", ii=1, jj=1, longridvalid=[], latgridvalid=[])    
     ga = GeoAxis(fig[ii, jj],
     dest = proj,
     xgridstyle = :dashdot,
