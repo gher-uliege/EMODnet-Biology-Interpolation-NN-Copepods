@@ -9,6 +9,45 @@
 Copepods are found everywhere in the ocean. They eat diatoms and phytoplankton, and constitute an essential link in the food web.
 Gridded maps are useful for data visualisation, but also to assess the change over long time periods.
 
+```geojson
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -30.0,
+              67.0
+            ],
+            [
+              -30.0,
+              42.0
+            ],
+            [
+              9.0,
+             42.0
+            ],
+            [
+              9.0,
+              67.0
+            ],
+            [
+              -30.0,
+              67.0
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      }
+    }
+  ]
+}
+```
+
 ### The method
 
 To create the gridded maps we will rely on [`DINCAE`](https://github.com/gher-uliege/DINCAE.jl) (Data-Interpolating Convolutional Auto-Encoder), a neural network designed to reconstruct missing data in satellite images, but that can be adapted to grid sparse, in situ measurements. 
