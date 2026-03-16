@@ -13,6 +13,7 @@ datadir = "../data/derived_data/"
 auxdatadir = "../data/aux_data/"
 validdir = "../data/derived_data/validation/"
 figdir = "../product/figures/"
+outputdir = "../product/"
 
 mkpath.([auxdatadir, datadir, dataprocdir, validdir, figdir]);
 
@@ -21,13 +22,13 @@ rawdatafile = joinpath(rawdatadir, "CPR_DINCAE_Data_290925.csv")
 
 # Set domain extension
 regiondict = Dict(
-    "NortheastAtlantic" => (-30, 9., 42., 67.),
-    "NorthAtlantic" => (-95, 27.5, 22.5, 79.0)
+    "NortheastAtlantic" => (-30, 9.0, 42.0, 67.0),
+    "NorthAtlantic" => (-95, 27.5, 22.5, 79.0),
 )
 
 regionlongname = Dict(
     "NortheastAtlantic" => "Northeast Atlantic Ocean",
-    "NorthAtlantic" => "North Atlantic Ocean"
+    "NorthAtlantic" => "North Atlantic Ocean",
 )
 
 regionname = "NortheastAtlantic"
@@ -35,7 +36,7 @@ regionname = "NortheastAtlantic"
 # Set grid extension 
 # (to avoid boundary problems)
 Δext = 5.0
-Δlon = 1.0
+Δlon=1.0
 Δlat = 1.0
 domain = regiondict[regionname]
 domaincompute = domain .+ (-Δext, Δext, -Δext, Δext)

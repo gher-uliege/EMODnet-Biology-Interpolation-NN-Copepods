@@ -1,26 +1,19 @@
 #   Run DINCAE analysis
 #   ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 # 
-#   Run the simplest analysis with DINCAE:
-# 
-#     •  no environmental variables
-# 
-#     •  few time periods
-# 
-#     •  all the parameters with default values.
-
 using Pkg
 Pkg.activate("../")
 Pkg.instantiate()
 include("../scripts/CopepodsNN.jl")
+include("../scripts/param.jl")
 using CUDA
 using cuDNN
 using DINCAE
 using Dates
 using NCDatasets
 using LinearAlgebra
+using Statistics
 
-include("../scripts/param.jl")
 varname = "Small_copepods"
 
 #   Set the correct variable types
@@ -59,29 +52,16 @@ grid = (domaincompute[1]:Δlon:domaincompute[2], domaincompute[3]:Δlat:domainco
 
 datafile1 = joinpath(dataprocdir, "Small_copepods_DINCAE_NortheastAtlantic_main.nc")
 datafile2 = joinpath(dataprocdir, "Large_copepods_DINCAE_NortheastAtlantic_main.nc")
-outputfilevalid1 = joinpath(datadir, replace(basename(datafile1), "_main.nc" => "_valid.nc"))
-outputfilevalid2 = joinpath(datadir, replace(basename(datafile2), "_main.nc" => "_valid.nc"))
+outputfilevalid1 =
+    joinpath(datadir, replace(basename(datafile1), "_main.nc" => "_valid.nc"))
+outputfilevalid2 =
+    joinpath(datadir, replace(basename(datafile2), "_main.nc" => "_valid.nc"))
 
 # Create output directory
 # =======================
 
-outputdir = "../product/param_optim"
-isdir(outputdir) ? @debug("already there") : mkpath(outputdir)
-
-# Download environmental data files
-# =================================
-
-# bathyfile = joinpath(covariabledir_regrid, "gebco_30sec_16_interp_1deg.nc")
-# sstfile = joinpath(covariabledir_regrid, "sst_hadley_1deg_ufill.nc")
-
-# CPRDINCAE.download_check(bathyfile, covariable_urls["bathymetry_1deg"])
-# CPRDINCAE.download_check(sstfile, covariable_urls["sst_hadley_1deg"])
-
-# # Path of the auxiliary fielddates
-# auxdata_files = [
-#   (filename = bathyfile, varname = "bathymetry", errvarname = "bathymetry_error"),
-#   (filename = sstfile, varname = "SST", errvarname = "SST_error")
-# ]
+outputbasedir = "../product/param_optim"
+isdir(outputbasedir) ? @debug("already there") : mkpath(outputbasedir)
 
 # Read the validation field
 
@@ -99,18 +79,32 @@ for iii = 1:2
     @info(" ")
     @info(paramdict)
 
+    outputdir = joinpath(outputbasedir, timestamp)
+    mkpath(outputdir)
+
+    # 1. Base run
+    # -----------
+
     outputfile = joinpath(outputdir, "smallcopepods_$(timestamp).nc")
     paramfile = joinpath(outputdir, "smallcopepods_$(timestamp)_params.nc")
     @info("Writing results to file $(outputfile)\nand parameters to file $(paramfile)")
 
-    theloss = DINCAE.reconstruct_points(F, Atype, datafile1, "Small_copepods", grid, [outputfile]; 
-    paramdict..., paramfile=paramfile) # , auxdata_files=auxdata_files)
+    theloss = DINCAE.reconstruct_points(
+        F,
+        Atype,
+        datafile1,
+        "Small_copepods",
+        grid,
+        [outputfile];
+        paramdict...,
+        paramfile = paramfile,
+    ) # , auxdata_files=auxdata_files)
 
     # Compute RMSE
-    ds = NCDataset(outputfile, "r")
-    field = ds[varname][:, :, :]
-    error = ds[varname * "_error"][:, :, :]
-    close(ds);
+    nc1 = NCDataset(outputfile, "r")
+    field = nc1[varname][:, :, :]
+    error = nc1[varname*"_error"][:, :, :]
+    close(nc1);
 
     fieldiff = collect(skipmissing(field - field_valid))
     rmse = norm(fieldiff) / sqrt(length(fieldiff))
@@ -119,9 +113,241 @@ for iii = 1:2
     @info("RMSE: $(rmse); bias: $(bias)");
 
     # Write the value into the netCDF
-    ds = NCDataset(outputfile, "a")
-    ds.attrib["RMSE"] = rmse
-    ds.attrib["bias"] = bias
-    close(ds);
+    nc2 = NCDataset(outputfile, "a")
+    nc2.attrib["RMSE"] = rmse
+    nc2.attrib["bias"] = bias
+    close(nc2);
+
+    # 2. Run with bathymetry
+    # ----------------------
+
+    auxdata_files = [(
+        filename = joinpath(dataprocdir, "gebco_30sec_16_interp_1deg_time.nc"),
+        varname = "bat",
+        errvarname = "bat_error",
+    ),]
+
+    outputfile = joinpath(outputdir, "smallcopepods_$(timestamp)_bathy.nc")
+    @info("Writing results to file $(outputfile)\nand parameters to file $(paramfile)")
+
+    theloss = DINCAE.reconstruct_points(
+        F,
+        Atype,
+        datafile1,
+        "Small_copepods",
+        grid,
+        [outputfile];
+        paramdict...,
+        paramfile = paramfile,
+        auxdata_files = auxdata_files,
+    )
+
+    # Compute RMSE
+    nc1 = NCDataset(outputfile, "r")
+    field = nc1[varname][:, :, :]
+    error = nc1[varname*"_error"][:, :, :]
+    close(nc1);
+
+    fieldiff = collect(skipmissing(field - field_valid))
+    rmse = norm(fieldiff) / sqrt(length(fieldiff))
+    bias = mean(fieldiff);
+
+    @info("RMSE: $(rmse); bias: $(bias)");
+
+    # Write the value into the netCDF
+    nc2 = NCDataset(outputfile, "a")
+    nc2.attrib["RMSE"] = rmse
+    nc2.attrib["bias"] = bias
+    close(nc2);
+
+    # 3. Run with SST
+    # ---------------
+
+    auxdata_files = [(
+        filename = joinpath(dataprocdir, "hadley_sst_1deg_time.nc"),
+        varname = "SST",
+        errvarname = "SST_error",
+    ),]
+
+    outputfile = joinpath(outputdir, "smallcopepods_$(timestamp)_sst.nc")
+    @info("Writing results to file $(outputfile)\nand parameters to file $(paramfile)")
+
+    theloss = DINCAE.reconstruct_points(
+        F,
+        Atype,
+        datafile1,
+        "Small_copepods",
+        grid,
+        [outputfile];
+        paramdict...,
+        paramfile = paramfile,
+        auxdata_files = auxdata_files,
+    )
+
+    # Compute RMSE
+    nc1 = NCDataset(outputfile, "r")
+    field = nc1[varname][:, :, :]
+    error = nc1[varname*"_error"][:, :, :]
+    close(nc1);
+
+    fieldiff = collect(skipmissing(field - field_valid))
+    rmse = norm(fieldiff) / sqrt(length(fieldiff))
+    bias = mean(fieldiff);
+
+    @info("RMSE: $(rmse); bias: $(bias)");
+
+    # Write the value into the netCDF
+    nc2 = NCDataset(outputfile, "a")
+    nc2.attrib["RMSE"] = rmse
+    nc2.attrib["bias"] = bias
+    close(nc2);
+
+    # 4. Run with bathymetry and SST
+    # ------------------------------
+
+    auxdata_files = [
+        (
+            filename = joinpath(dataprocdir, "gebco_30sec_16_interp_1deg_time.nc"),
+            varname = "bat",
+            errvarname = "bat_error",
+        ),
+        (
+            filename = joinpath(dataprocdir, "hadley_sst_1deg_time.nc"),
+            varname = "SST",
+            errvarname = "SST_error",
+        ),
+    ]
+
+    outputfile = joinpath(outputdir, "smallcopepods_$(timestamp)_bathy_sst.nc")
+    @info("Writing results to file $(outputfile)\nand parameters to file $(paramfile)")
+
+    theloss = DINCAE.reconstruct_points(
+        F,
+        Atype,
+        datafile1,
+        "Small_copepods",
+        grid,
+        [outputfile];
+        paramdict...,
+        paramfile = paramfile,
+        auxdata_files = auxdata_files,
+    )
+
+    # Compute RMSE
+    nc1 = NCDataset(outputfile, "r")
+    field = nc1[varname][:, :, :]
+    error = nc1[varname*"_error"][:, :, :]
+    close(nc1);
+
+    fieldiff = collect(skipmissing(field - field_valid))
+    rmse = norm(fieldiff) / sqrt(length(fieldiff))
+    bias = mean(fieldiff);
+
+    @info("RMSE: $(rmse); bias: $(bias)");
+
+    # Write the value into the netCDF
+    nc2 = NCDataset(outputfile, "a")
+    nc2.attrib["RMSE"] = rmse
+    nc2.attrib["bias"] = bias
+    close(nc2);
+
+    # 5. Run with bathymetry and SST and distance to coast
+    # ----------------------------------------------------
+
+    auxdata_files = [
+        (
+            filename = joinpath(dataprocdir, "gebco_30sec_16_interp_1deg_time.nc"),
+            varname = "bat",
+            errvarname = "bat_error",
+        ),
+        (
+            filename = joinpath(dataprocdir, "hadley_sst_1deg_time.nc"),
+            varname = "SST",
+            errvarname = "SST_error",
+        ),
+        (
+            filename = joinpath(dataprocdir, "dist_coast_interp_1deg_time.nc"),
+            varname = "dist",
+            errvarname = "dist_error",
+        ),
+    ]
+
+    outputfile = joinpath(outputdir, "smallcopepods_$(timestamp)_bathy_sst_coast.nc")
+    @info("Writing results to file $(outputfile)\nand parameters to file $(paramfile)")
+
+    theloss = DINCAE.reconstruct_points(
+        F,
+        Atype,
+        datafile1,
+        "Small_copepods",
+        grid,
+        [outputfile];
+        paramdict...,
+        paramfile = paramfile,
+        auxdata_files = auxdata_files,
+    )
+
+    # Compute RMSE
+    nc1 = NCDataset(outputfile, "r")
+    field = nc1[varname][:, :, :]
+    error = nc1[varname*"_error"][:, :, :]
+    close(nc1);
+
+    fieldiff = collect(skipmissing(field - field_valid))
+    rmse = norm(fieldiff) / sqrt(length(fieldiff))
+    bias = mean(fieldiff);
+
+    @info("RMSE: $(rmse); bias: $(bias)");
+
+    # Write the value into the netCDF
+    nc2 = NCDataset(outputfile, "a")
+    nc2.attrib["RMSE"] = rmse
+    nc2.attrib["bias"] = bias
+    close(nc2);
+
+    # 6. Run with distance to coast
+    # ----------------------------------------------------
+
+    auxdata_files = [
+        (
+            filename = joinpath(dataprocdir, "dist_coast_interp_1deg_time.nc"),
+            varname = "dist",
+            errvarname = "dist_error",
+        ),
+    ]
+
+    outputfile = joinpath(outputdir, "smallcopepods_$(timestamp)_coast.nc")
+    @info("Writing results to file $(outputfile)\nand parameters to file $(paramfile)")
+
+    theloss = DINCAE.reconstruct_points(
+        F,
+        Atype,
+        datafile1,
+        "Small_copepods",
+        grid,
+        [outputfile];
+        paramdict...,
+        paramfile = paramfile,
+        auxdata_files = auxdata_files,
+    )
+
+    # Compute RMSE
+    nc1 = NCDataset(outputfile, "r")
+    field = nc1[varname][:, :, :]
+    error = nc1[varname*"_error"][:, :, :]
+    close(nc1);
+
+    fieldiff = collect(skipmissing(field - field_valid))
+    rmse = norm(fieldiff) / sqrt(length(fieldiff))
+    bias = mean(fieldiff);
+
+    @info("RMSE: $(rmse); bias: $(bias)");
+
+    # Write the value into the netCDF
+    nc2 = NCDataset(outputfile, "a")
+    nc2.attrib["RMSE"] = rmse
+    nc2.attrib["bias"] = bias
+    close(nc2);
+
 
 end
