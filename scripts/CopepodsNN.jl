@@ -1173,9 +1173,9 @@ function write_netcdf_grid(
 end
 
 """
-	compute_data_num(loncpr, latcpr, datescpr, longrid, latgrid, timegrid, valex=valex)
+	compute_data_num_mean(loncpr, latcpr, datescpr, valuescpr, longrid, latgrid, timegrid, valex=valex)
 	
-Compute the number of observations in each grid cell defined by `longrid`, `latgrid` and `timegrid`. 
+Compute the number of observations and their average value in each grid cell defined by `longrid`, `latgrid` and `timegrid`. 
 
 The values can then be written in a netCDF file with the function `write_netcdf_datanum_grid`.
 """
@@ -1183,6 +1183,7 @@ function compute_data_num(
     loncpr::Vector{Float64},
     latcpr::Vector{Float64},
     datescpr::Vector{Date},
+    valuescpr::Vector{Float64},
     longrid::StepRangeLen,
     latgrid::StepRangeLen,
     timegrid::Vector{Date},
@@ -1197,6 +1198,7 @@ function compute_data_num(
 
     # Allocate matrices
     data_num = zeros(Int64, length(longrid), length(latgrid), length(timegrid))
+    data_mean = Array{Union{Missing, Float64}}(missing, length(longrid), length(latgrid), length(timegrid))
 
     # Loop on time
     Threads.@threads for ttt ∈ 1:length(timegrid)#(ttt, ddates) in enumerate(fielddates_monthly)
@@ -1222,17 +1224,18 @@ function compute_data_num(
 
                 if length(datasel) > 0
                     data_num[iii, jjj, ttt] = length(datasel)
+                    data_mean[iii, jjj, ttt] = mean(valuescpr[datasel])
                 end
             end
         end
     end
-    return data_num::Array{Int64,3}
+    return data_num::Array{Int64,3}, data_mean::Array{Union{Missing, Float64}, 3}
 
 end
 
 
 """
-	write_netcdf_datanum_grid(ncfile, longrid, latgrid, dategrid, data_num, mask, valex)
+	write_netcdf_datanum_grid(ncfile, longrid, latgrid, dategrid, data_num, data_mean, mask, valex)
 
 Write the number of observations per grid cell (space and time) in a netCDF file. 
 Inputs are produced by the function `compute_data_num`.
@@ -1249,7 +1252,7 @@ Inputs are produced by the function `compute_data_num`.
 # Example
 ```julia-repl
 julia> write_netcdf_datanum_grid("Calanus_Finmarchicus_grid.nc", longrid, latgrid, 
-dategrid, data_num, mask)
+dategrid, data_num, data_mean)
 ```
 """
 function write_netcdf_datanum_grid(
@@ -1258,6 +1261,7 @@ function write_netcdf_datanum_grid(
     latgrid::Vector{Float64},
     dategrid::Vector{Date},
     data_num::Array{Int64,3};
+    data_mean::Array{Union{Missing, Float64}, 3},
     valex::Float64 = -999.0,
 )
 
@@ -1375,6 +1379,19 @@ function write_netcdf_datanum_grid(
             "actual_range" => [0, maximum(data_num)],
             "coordinates" => "time, lat, lon",
             "long_name" => "Number of Small copepods observations per grid cell",
+            "units" => "Number of observations",
+        ),
+    )
+
+    defVar(
+        ds,
+        "data_nmean",
+        data_mean,
+        ("lon", "lat", "time"),
+        attrib = OrderedDict(
+            "actual_range" => [0, maximum(data_num)],
+            "coordinates" => "time, lat, lon",
+            "long_name" => "Mean value of observations per grid cell",
             "units" => "Individuals per cubic meter",
         ),
     )
