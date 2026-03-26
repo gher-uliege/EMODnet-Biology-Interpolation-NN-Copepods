@@ -115,3 +115,10 @@ Available to download in:
 
 Charles Troupin (ULiège), Pierre Helaouët (MBA)      
 Copyright (c) 2025 ULiège (GHER)
+
+## Procedure
+
+1. Download the data file from https://doi.org/10.17031/68da4a97650f1
+2. Edit and run `read_copepods_data.ipynb` to convert the CSV to netCDF files (one per group): `Small_copepods_DINCAE_$(regionname).nc` and `Large_copepods_DINCAE_$(regionname).nc` (where `regionname` is defined in `param.jl`).
+3. Edit and run `prepare_validation_data.ipynb` to prepare the data files that will be used for the training and for the validation
+4. 

@@ -36,7 +36,7 @@ regionname = "NortheastAtlantic"
 # Set grid extension 
 # (to avoid boundary problems)
 Δext = 5.0
-Δlon=1.0
+Δlon = 1.0
 Δlat = 1.0
 domain = regiondict[regionname]
 domaincompute = domain .+ (-Δext, Δext, -Δext, Δext)

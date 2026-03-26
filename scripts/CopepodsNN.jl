@@ -1260,8 +1260,8 @@ function write_netcdf_datanum_grid(
     longrid::Vector{Float64},
     latgrid::Vector{Float64},
     dategrid::Vector{Date},
-    data_num::Array{Int64,3};
-    data_mean::Array{Union{Missing, Float64}, 3},
+    data_num::Array{Int64,3},
+    data_mean::Array{Union{Missing, Float64}, 3};
     valex::Float64 = -999.0,
 )
 
