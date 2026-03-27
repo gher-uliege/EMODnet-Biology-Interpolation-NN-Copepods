@@ -15,6 +15,7 @@ using LinearAlgebra
 using Statistics
 
 varname = "Small_copepods"
+varname = "Large_copepods"
 
 #   Set the correct variable types
 #   ================================
@@ -50,12 +51,9 @@ grid = (domaincompute[1]:Δlon:domaincompute[2], domaincompute[3]:Δlat:domainco
 #   Read the data file
 #   =======================
 
-datafile1 = joinpath(dataprocdir, "Small_copepods_DINCAE_NortheastAtlantic_main.nc")
-datafile2 = joinpath(dataprocdir, "Large_copepods_DINCAE_NortheastAtlantic_main.nc")
+datafile1 = joinpath(dataprocdir, "$(varname)_DINCAE_NortheastAtlantic_main.nc")
 outputfilevalid1 =
     joinpath(datadir, replace(basename(datafile1), "_main.nc" => "_valid.nc"))
-outputfilevalid2 =
-    joinpath(datadir, replace(basename(datafile2), "_main.nc" => "_valid.nc"))
 
 # Create output directory
 # =======================
@@ -66,14 +64,14 @@ isdir(outputbasedir) ? @debug("already there") : mkpath(outputbasedir)
 # Read the validation field
 
 ds = NCDataset(outputfilevalid1, "r")
-field_valid = ds["Small_copepods_mean"][:, :, :]
+field_valid = ds["$(varname)_mean"][:, :, :]
 close(ds);
 
 # Main loop
 # =========
 
 dateformat = "yyyymmddTHHMMSS"
-for iii = 1:2
+for iii = 1:400
     timestamp = Dates.format(Dates.now(), dateformat)
     paramdict = CopepodsNN.create_random_params()
     @info(" ")
@@ -85,15 +83,15 @@ for iii = 1:2
     # 1. Base run
     # -----------
 
-    outputfile = joinpath(outputdir, "smallcopepods_$(timestamp).nc")
-    paramfile = joinpath(outputdir, "smallcopepods_$(timestamp)_params.nc")
+    outputfile = joinpath(outputdir, "$(varname)_$(timestamp).nc")
+    paramfile = joinpath(outputdir, "$(varname)_$(timestamp)_params.nc")
     @info("Writing results to file $(outputfile)\nand parameters to file $(paramfile)")
 
     theloss = DINCAE.reconstruct_points(
         F,
         Atype,
         datafile1,
-        "Small_copepods",
+        "$(varname)",
         grid,
         [outputfile];
         paramdict...,
@@ -127,14 +125,14 @@ for iii = 1:2
         errvarname = "bat_error",
     ),]
 
-    outputfile = joinpath(outputdir, "smallcopepods_$(timestamp)_bathy.nc")
+    outputfile = joinpath(outputdir, "$(varname)_$(timestamp)_bathy.nc")
     @info("Writing results to file $(outputfile)\nand parameters to file $(paramfile)")
 
     theloss = DINCAE.reconstruct_points(
         F,
         Atype,
         datafile1,
-        "Small_copepods",
+        "$(varname)",
         grid,
         [outputfile];
         paramdict...,
@@ -169,14 +167,14 @@ for iii = 1:2
         errvarname = "SST_error",
     ),]
 
-    outputfile = joinpath(outputdir, "smallcopepods_$(timestamp)_sst.nc")
+    outputfile = joinpath(outputdir, "$(varname)_$(timestamp)_sst.nc")
     @info("Writing results to file $(outputfile)\nand parameters to file $(paramfile)")
 
     theloss = DINCAE.reconstruct_points(
         F,
         Atype,
         datafile1,
-        "Small_copepods",
+        "$(varname)",
         grid,
         [outputfile];
         paramdict...,
@@ -218,14 +216,14 @@ for iii = 1:2
         ),
     ]
 
-    outputfile = joinpath(outputdir, "smallcopepods_$(timestamp)_bathy_sst.nc")
+    outputfile = joinpath(outputdir, "$(varname)_$(timestamp)_bathy_sst.nc")
     @info("Writing results to file $(outputfile)\nand parameters to file $(paramfile)")
 
     theloss = DINCAE.reconstruct_points(
         F,
         Atype,
         datafile1,
-        "Small_copepods",
+        "$(varname)",
         grid,
         [outputfile];
         paramdict...,
@@ -272,14 +270,14 @@ for iii = 1:2
         ),
     ]
 
-    outputfile = joinpath(outputdir, "smallcopepods_$(timestamp)_bathy_sst_coast.nc")
+    outputfile = joinpath(outputdir, "$(varname)_$(timestamp)_bathy_sst_coast.nc")
     @info("Writing results to file $(outputfile)\nand parameters to file $(paramfile)")
 
     theloss = DINCAE.reconstruct_points(
         F,
         Atype,
         datafile1,
-        "Small_copepods",
+        "$(varname)",
         grid,
         [outputfile];
         paramdict...,
@@ -316,14 +314,14 @@ for iii = 1:2
         ),
     ]
 
-    outputfile = joinpath(outputdir, "smallcopepods_$(timestamp)_coast.nc")
+    outputfile = joinpath(outputdir, "$(varname)_$(timestamp)_coast.nc")
     @info("Writing results to file $(outputfile)\nand parameters to file $(paramfile)")
 
     theloss = DINCAE.reconstruct_points(
         F,
         Atype,
         datafile1,
-        "Small_copepods",
+        "$(varname)",
         grid,
         [outputfile];
         paramdict...,
