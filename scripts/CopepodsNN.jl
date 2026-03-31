@@ -11,14 +11,7 @@ using Random
 using Distributions
 using ImageFiltering
 using GeoJSON
-#using GeoArrays
-#using PolygonOps
-#using Downloads
-#using GeoDatasets
-#using Makie
-#using CairoMakie
-#using GeoMakie
-#using DIVAnd
+
 
 juliaversion = "v1.12.4"
 
@@ -560,8 +553,8 @@ julia> parameters = create_random_params(epochs_min=1000, epochs_max=5000)
 ```
 """
 function create_random_params(;
-    epochs_min::Int64 = 10,
-    epochs_max::Int64 = 50,
+    eepochs_min::Int64=500,
+    epochs_max::Int64=5000,
     learning_rate_min::Float64 = 1e-4,
     learning_rate_max::Float64 = 1e-2,
     laplacian_penalty_min::Float64 = 1e-6,
