@@ -553,7 +553,7 @@ julia> parameters = create_random_params(epochs_min=1000, epochs_max=5000)
 ```
 """
 function create_random_params(;
-    eepochs_min::Int64=500,
+    epochs_min::Int64=500,
     epochs_max::Int64=5000,
     learning_rate_min::Float64 = 1e-4,
     learning_rate_max::Float64 = 1e-2,
