@@ -15,7 +15,7 @@ using LinearAlgebra
 using Statistics
 
 varname = "Small_copepods"
-varname = "Large_copepods"
+# varname = "Large_copepods"
 
 #   Set the correct variable types
 #   ================================
@@ -58,7 +58,7 @@ outputfilevalid1 =
 # Create output directory
 # =======================
 
-outputbasedir = "../product/param_optim"
+outputbasedir = "../product/param_optim/$(varname)"
 isdir(outputbasedir) ? @debug("already there") : mkpath(outputbasedir)
 
 # Read the validation field

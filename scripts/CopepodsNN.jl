@@ -1397,5 +1397,35 @@ function write_netcdf_datanum_grid(
     return nothing
 end
 
+"""
+    get_field(outputfile, varname, timeindex)
+
+Read the gridded field stored in `outputfile` with the variable name `varname` and at 
+the time index `timeindex`.
+
+# Example
+```julia-repl
+julia> fieldoutput, RMS =  get_field(outputfile, varname)
+```
+"""
+function get_field(
+    outputfile::AbstractString,
+    varname::AbstractString,
+    timeindex::Int64 = 1,
+)
+    ds = NCDataset(outputfile)
+    field2plot = coalesce.(ds[varname][:, :, timeindex], NaN)
+    try
+        RMS = ds.attrib["RMSE"]
+    catch e
+        @warn("RMS not written in file")
+        RMS = 99999.0
+    end
+
+    RMS = round(RMS, digits = 3)
+    close(ds)
+    return field2plot::Matrix{Float32}, RMS::Float64
+end
+
 
 end # end of module 
