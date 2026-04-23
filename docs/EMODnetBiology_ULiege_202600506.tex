@@ -1,0 +1,234 @@
+\input{EMODnet_style2026.tex}
+\usepackage[export]{adjustbox}
+\newcommand{\listcheck}{\textcolor{DarkGreen}{\checkmark}}
+\newcommand{\listcross}{\textcolor{red}{\XSolidBrush}}
+
+\title{EMODnet Biology Phase VI}
+\subtitle{Progress meeting}
+\author{C.~Troupin}
+\institute{University of Liège}
+\date{12-13 May 2025}
+\titlegraphic{\includegraphics[height=\logoheight]{logo_uliege}~\includegraphics[height=\logoheight]{logo_gher}
+}
+
+\definecolor{highlightext}{HTML}{8E8E8E}
+
+\AtBeginDocument{\usebeamerfont{normal text}}
+
+\begin{document}
+
+
+% Title frame, no content needed here
+{
+\thispagestyle{empty}
+\usebackgroundtemplate{\includegraphics[width=\paperwidth]{pg_0001.pdf}}
+\begin{frame}[noframenumbering]
+\end{frame}
+}
+% -----------------------------------
+\usebackgroundtemplate{\includegraphics[width=\paperwidth]{pg_0002.pdf}}
+
+\begin{frame}
+\frametitle{The results}
+
+Two netCDF files \\
+storing set of gridded maps\\
+ showing the abundance of specific taxonomic groups\\
+ (small copepods and large copepods)\\
+  obtained with the \textit{Continuous Plankton Recorder} (CPR) 
+
+\vspace{1cm}
+But did we get there?
+\end{frame}
+
+% -------------------------------------------------------------------------------------------------------
+\begin{frame}
+\frametitle{Continuous Plankton Recorder (CPR) survey}
+
+\begin{itemize}
+\item Long time series with consistent measurement technique (since 1931)
+\item Extensive spatial coverage
+\end{itemize}
+
+\aiDoi~\href{https://doi.org/10.17031/68da4a97650f1}{10.17031/68da4a97650f1}
+\faLink~\url{https://www.cprsurvey.org/}
+\url{https://doi.mba.ac.uk/data/3548/}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Activities within WP2}
+
+Product = a set of gridded maps showing the abundance of specific taxa obtained with the \textit{Continuous Plankton Recorder} (CPR) 
+
+\vspace*{1cm}
+
+
+
+\end{frame}
+
+
+% -------------------------------------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{The gridding tool: DINCAE}
+
+
+\textbf{Method:} Data INterpolating Convolutional Auto-Encoder(DINCAE)
+\begin{description}
+\item[\faGithub] \url{https://github.com/gher-uliege/DINCAE.jl}
+\item[\aiDoi] \href{https://doi.org/10.5281/zenodo.5575066}{10.5281/zenodo.5575066}
+\item[\faFilePdfO] \url{https://gmd.copernicus.org/articles/15/2183/2022/}
+\end{description}
+
+
+\end{frame}
+
+
+% -------------------------------------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Specific developments of DINCAE}
+
+
+\begin{enumerate}
+\item Use \textit{environmental variables} to help \textit{guide} the neural network
+\item Add \textit{smoothing constrain} to the cost function 
+\end{enumerate}
+
+
+\end{frame}
+
+% -------------------------------------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Sequence of operations}
+
+
+\begin{enumerate}
+\item<1-> Create training and validation dataset \comment{10\% of observations}
+\item<2-> Generate random set of parameters \comment{number of epochs, learning rate, smoothing, \ldots}
+\item<3-> Perform analysis \comment{with $\ne$ environment variables}
+\item<4-> Compute Root Mean Square Deviation \comment{using the validation dataset}
+\item<5-> Find best combination of parameters \comment{i.e. with lowest RMSD}
+\item<6-> Perform gridding with best parameters on full datasets 
+\end{enumerate}
+
+
+\end{frame}
+
+% -------------------------------------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Results validation}
+
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+   \begin{enumerate}
+\item<1-> 
+\item<2->
+\item<3->  
+\end{enumerate}
+\end{column}
+\begin{column}{0.5\textwidth}
+ppp
+    \begin{center}
+     %\includegraphics[width=0.5\textwidth]{image1.jpg}      
+     \end{center}
+\end{column}
+\end{columns}
+
+
+
+\end{frame}
+
+
+% -------------------------------------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Conclusions \& lessons learned}
+
+
+\begin{columns}
+\begin{column}{0.33\textwidth}
+{\centering \huge \circled{1}{blueemodnet}{black}{white} }
+
+\vspace*{1cm}
+
+Neural network algorithm capable to generate smooth, consistent gridded fields from sparse observations
+\end{column}
+
+\begin{column}{.33\textwidth}
+{\centering \huge \circled{2}{blueemodnet}{black}{white} }
+
+\vspace*{1cm}
+
+Essential to have optimised values for the neural network parameters
+
+\end{column}
+
+
+\begin{column}{0.33\textwidth}
+
+{\centering \huge \circled{3}{blueemodnet}{black}{white} }
+
+\vspace*{1cm}
+
+Requirement to run a large number of analysis before the final results
+
+\end{column}
+
+
+
+
+\end{columns}
+
+
+
+\end{frame}
+
+% -------------------------------------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{What does the data look like?}
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+
+
+
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=.9\textwidth]{data_location_NortheastAtlantic.png}
+\end{figure}
+
+\end{column}
+
+
+
+
+\end{columns}
+
+\end{frame}
+
+
+% -------------------------------------------------------------------------------------------------------
+
+% Final slide, nothing to touch
+{
+\thispagestyle{empty}
+\usebackgroundtemplate{\includegraphics[width=\paperwidth]{pg_0005.pdf}}
+\begin{frame}
+
+\end{frame}
+}
+
+
+
+
+\end{document}

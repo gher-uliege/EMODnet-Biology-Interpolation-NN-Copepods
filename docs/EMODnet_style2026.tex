@@ -1,0 +1,116 @@
+\documentclass[11pt,xcolor=table,svgnames,aspectratio=169]{beamer}
+\usepackage{graphicx}
+\usepackage{fontspec}
+\usepackage{tikz}
+\usepackage{doi}
+\usepackage{fontawesome}
+\usepackage{academicons}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{tcolorbox}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{stackengine}
+\usepackage{bbding}
+
+
+%--------------------------------
+\hypersetup{bookmarksopen=true,
+bookmarksnumbered=true,  
+pdffitwindow=true, 
+pdfstartview=Fit,
+pdffitwindow=true,
+pdftoolbar=true,
+pdfmenubar=true,
+pdfwindowui=true,
+pdfsubject={EMODnet Biology, Data analysis, Interpolation, DIVAnd},
+pdfauthor={C. Troupin},
+bookmarksopenlevel=0,
+colorlinks=true,
+linkcolor=frametitle,anchorcolor=black,%
+citecolor=frametitle,filecolor=black,%
+menucolor=black,urlcolor=frametitle,%
+pdfpageduration=1,%
+}
+
+
+\newcolumntype{Q}{>{\raggedleft\arraybackslash}X} 
+\newcolumntype{P}{>{\raggedright\arraybackslash}X}
+
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+
+%\usefonttheme{serif}
+\usefonttheme{professionalfonts}
+\usetikzlibrary{positioning}
+
+\DeclareGraphicsExtensions{.pdf,.png,.PNG,.JPG,.jpg,.jpeg,.gif}
+\graphicspath{
+{./figures/},
+{/home/ctroupin/Presentations/figures4presentations/},
+{/home/ctroupin/Presentations/figures4presentations/logo/},
+}
+
+\usetikzlibrary{arrows,shapes,backgrounds,spy,calc}
+\tikzstyle{every picture}+=[remember picture]
+\tikzstyle{na} = [baseline=-.5ex]
+
+\newcommand*\circled[4]{\tikz[baseline=(char.base)]{
+    \node[shape=circle, fill=#2, draw=#3, text=#4, inner sep=2pt, opacity=.75] (char) {#1};}}
+
+\usepackage{dashbox}
+\newcommand{\mybox}[1]{\color{blueemodnet}{\dbox{#1}}}
+
+
+
+\urlstyle{sf}
+
+\newcommand{\logoheight}{.75cm}
+
+\setmainfont{Carlito}
+
+\definecolor{author}{HTML}{7F7F7F}
+\definecolor{frametitle}{HTML}{333333}
+\definecolor{email}{HTML}{FFC000}
+\definecolor{blueemodnet}{HTML}{0a71b4}
+
+
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{author}{fg=white}
+\setbeamercolor{institute}{fg=white}
+\setbeamercolor{frametitle}{fg=frametitle}
+\setbeamercolor{date}{fg=white}
+\setbeamercolor{enumerate item}{fg=blueemodnet}
+\setbeamercolor{description item}{fg=blueemodnet}
+\setbeamercolor{itemize item}{fg=blueemodnet}
+
+
+\setbeamerfont{title}{size=\fontsize{14pt}{10}\selectfont}
+\setbeamerfont{author}{size=\fontsize{9.5pt}{5}\selectfont}
+\setbeamerfont{subtitle}{size=\fontsize{8pt}{10}\selectfont}
+\setbeamerfont{frametitle}{size=\fontsize{12pt}{8}\selectfont,series=\bfseries}
+\setbeamerfont{date}{size=\fontsize{8pt}{10}\selectfont}
+\setbeamerfont{page number in head/foot}{size=\tiny}
+
+\setbeamertemplate{frametitle}{\vspace*{.3cm}\hspace*{-0.5cm}\insertframetitle}
+%\defbeamertemplate{itemize item}{image}{\small\includegraphics[height=1.6ex]{itememodnet.png}}
+\setbeamertemplate{itemize item}[image]
+\setbeamertemplate{navigation symbols}{}
+
+%\setbeamertemplate{frametitle}{\hspace*{-0.5cm}\insertframetitle}
+
+\setbeamertemplate{footline}
+{
+  \hbox{%
+  \begin{beamercolorbox}[wd=.97\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{footline} \textcolor{frametitle}{\insertframenumber{}}
+  \end{beamercolorbox}}%
+  \vskip0.35cm%
+}
+
+\definecolor{commentcolor}{rgb}{0.75,.75,.75}
+\renewcommand{\comment}[1]{\hfill\textcolor{commentcolor}{\footnotesize{#1}}}
+
