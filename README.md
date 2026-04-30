@@ -82,21 +82,44 @@ unzip CPR_DataRequest_DINCAE_29Sep25.zip
 ```
 
 Three files are obtained:
-1. CPR_Data_DINCAE_290925.docx: the documentation,
-2. CPR_DINCAE_ControlMap_29092025.png: a map representing the selected samples,
-3. CPR_DINCAE_Data_290925.csv: the selected samples.
+1. `CPR_Data_DINCAE_290925.docx`: the documentation,
+2. `CPR_DINCAE_ControlMap_29092025.png`: a map representing the selected samples,
+3. `CPR_DINCAE_Data_290925.csv`: the selected samples.
 
 ## Data product
 
-The data product consists of a netCDF file storing gridded fields for two variables: the _small copepods_ and the _large copepods_
-.
+The data product consists of a netCDF file storing gridded fields for two variables: the _small copepods_ and the _large copepods_.
+
 ## More information:
 
 ### References
 
 ### Code and methodology
 
-`DINCAE` software is available at https://github.com/gher-uliege/DINCAE.jl
+`DINCAE` software is available at https://github.com/gher-uliege/DINCAE.jl.     
+The code is described in the following papers:
+
+Barth, A., Alvera-Azcárate, A., Licer, M., & Beckers, J.-M. (2020). DINCAE 1.0: a convolutional neural network with error estimates to reconstruct sea surface temperature satellite observations. Geoscientific Model Development, 13(3), 1609–1622. https://doi.org/10.5194/gmd-13-1609-2020
+
+<details>
+<summary>BibTeX entry</summary>
+```bash
+@Article{gmd-13-1609-2020,
+AUTHOR = {Barth, A. and Alvera-Azc\'arate, A. and Licer, M. and Beckers, J.-M.},
+TITLE = {DINCAE 1.0: a convolutional neural network with error estimates to reconstruct sea surface temperature satellite observations},
+JOURNAL = {Geoscientific Model Development},
+VOLUME = {13},
+YEAR = {2020},
+NUMBER = {3},
+PAGES = {1609--1622},
+URL = {https://gmd.copernicus.org/articles/13/1609/2020/},
+DOI = {10.5194/gmd-13-1609-2020}
+}
+```
+</details>
+
+
+Barth, A., Alvera-Azcárate, A., Troupin, C., & Beckers, J.-M. (2022). DINCAE 2.0: multivariate convolutional neural network with error estimates to reconstruct sea surface temperature satellite and altimetry observations. Geoscientific Model Development, 15(5), 2183–2196. https://doi.org/10.5194/gmd-15-2183-2022
 
 ### Citation and download link
 
