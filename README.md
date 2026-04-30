@@ -99,10 +99,32 @@ The data product consists of a netCDF file storing gridded fields for two variab
 `DINCAE` software is available at https://github.com/gher-uliege/DINCAE.jl.     
 The code is described in the following papers:
 
-Barth, A., Alvera-Azcárate, A., Licer, M., & Beckers, J.-M. (2020). DINCAE 1.0: a convolutional neural network with error estimates to reconstruct sea surface temperature satellite observations. Geoscientific Model Development, 13(3), 1609–1622. https://doi.org/10.5194/gmd-13-1609-2020
+Barth, A., Alvera-Azcárate, A., Troupin, C., & Beckers, J.-M. (2022). DINCAE 2.0: multivariate convolutional neural network with error estimates to reconstruct sea surface temperature satellite and altimetry observations. _Geoscientific Model Development_, __15(5)__, 2183–2196. https://doi.org/10.5194/gmd-15-2183-2022
 
 <details>
 <summary>BibTeX entry</summary>
+
+```bash
+@Article{gmd-15-2183-2022,
+AUTHOR = {Barth, A. and Alvera-Azc\'arate, A. and Troupin, C. and Beckers, J.-M.},
+TITLE = {DINCAE 2.0: multivariate convolutional neural network with error estimates to reconstruct sea surface temperature satellite and altimetry observations},
+JOURNAL = {Geoscientific Model Development},
+VOLUME = {15},
+YEAR = {2022},
+NUMBER = {5},
+PAGES = {2183--2196},
+URL = {https://gmd.copernicus.org/articles/15/2183/2022/},
+DOI = {10.5194/gmd-15-2183-2022}
+}
+``` 
+
+</details>
+
+Barth, A., Alvera-Azcárate, A., Licer, M., & Beckers, J.-M. (2020). DINCAE 1.0: a convolutional neural network with error estimates to reconstruct sea surface temperature satellite observations. _Geoscientific Model Development_, __13(3)__, 1609–1622. https://doi.org/10.5194/gmd-13-1609-2020
+
+<details>
+<summary>BibTeX entry</summary>
+
 ```bash
 @Article{gmd-13-1609-2020,
 AUTHOR = {Barth, A. and Alvera-Azc\'arate, A. and Licer, M. and Beckers, J.-M.},
@@ -115,11 +137,9 @@ PAGES = {1609--1622},
 URL = {https://gmd.copernicus.org/articles/13/1609/2020/},
 DOI = {10.5194/gmd-13-1609-2020}
 }
-```
+``` 
+
 </details>
-
-
-Barth, A., Alvera-Azcárate, A., Troupin, C., & Beckers, J.-M. (2022). DINCAE 2.0: multivariate convolutional neural network with error estimates to reconstruct sea surface temperature satellite and altimetry observations. Geoscientific Model Development, 15(5), 2183–2196. https://doi.org/10.5194/gmd-15-2183-2022
 
 ### Citation and download link
 
@@ -141,7 +161,17 @@ Copyright (c) 2025 ULiège (GHER)
 
 ## Procedure
 
-1. Download the data file from https://doi.org/10.17031/68da4a97650f1
+1. Download the data file from https://doi.org/10.17031/68da4a97650f1.
+<details>
+The zip file has to be extracted in the corresponding directory (`./data/raw_data/`).
+
+Three files are obtained:
+1. `CPR_Data_DINCAE_290925.docx`: the documentation,
+2. `CPR_DINCAE_ControlMap_29092025.png`: a map representing the selected samples,
+3. `CPR_DINCAE_Data_290925.csv`: the selected samples.
+
+</details>
 2. Edit and run `read_copepods_data.ipynb` to convert the CSV to netCDF files (one per group): `Small_copepods_DINCAE_$(regionname).nc` and `Large_copepods_DINCAE_$(regionname).nc` (where `regionname` is defined in `param.jl`).
-3. Edit and run `prepare_validation_data.ipynb` to prepare the data files that will be used for the training and for the validation
-4. 
+3. Edit and run `prepare_validation_data.ipynb` to prepare the data files that will be used for the training and for the validation.
+4. Run `prepare_environment_variables.ipynb` to prepare the environmental data (bathymetry, distance to coastline, sea surface temperature).
+5. Run the script `run_DINCAE_random_copepods.jl` to generate analysis with a random set of _hyperparameters_. 
