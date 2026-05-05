@@ -3,6 +3,9 @@ module CopepodsNN
 using DelimitedFiles
 using Dates
 using NCDatasets
+using Downloads
+using PolygonOps
+using GeoArrays
 using DataStructures
 using GridInterpolations
 using Interpolations
@@ -11,9 +14,10 @@ using Random
 using Distributions
 using ImageFiltering
 using GeoJSON
+using GeoDatasets
 
 
-juliaversion = "v1.12.4"
+juliaversion = "v1.13.0-rc1"
 
 """
 	get_dox_url(ID)

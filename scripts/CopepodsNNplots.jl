@@ -8,6 +8,7 @@ using Makie
 using CairoMakie
 using GeoMakie
 using DIVAnd
+using GeoDatasets
 
 
 """
