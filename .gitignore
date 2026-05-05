@@ -1,3 +1,4 @@
+*.pdf
 # NetCDF files
 *.nc
 
