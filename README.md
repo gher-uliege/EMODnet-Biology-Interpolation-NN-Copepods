@@ -9,6 +9,10 @@
 Copepods are found everywhere in the ocean. They eat diatoms and phytoplankton, and constitute an essential link in the food web.
 Gridded maps are useful for data visualisation, but also to assess the change over long time periods.
 
+Two taxonomic groups are considered in this work:
+- the _small copepods_: they correspond to the mean values of the 46 small copepods taxa (<= 2mm) found in the selected area;
+- the _large copepods_: they correspond to the mean values of the 110 large copepods taxa (> 2mm) found in the selected area.
+
 ```geojson
 {
   "type": "FeatureCollection",
