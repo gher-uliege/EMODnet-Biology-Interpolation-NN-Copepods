@@ -2,6 +2,7 @@
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 ![GitHub top language](https://img.shields.io/github/languages/top/gher-uliege/EMODnet-Biology-Interpolation-NN-Copepods)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/gher-uliege/EMODnet-Biology-Interpolation-NN-Copepods) ![GitHub contributors](https://img.shields.io/github/contributors/gher-uliege/EMODnet-Biology-Interpolation-NN-Copepods) ![GitHub last commit](https://img.shields.io/github/last-commit/gher-uliege/EMODnet-Biology-Interpolation-NN-Copepods)     
+[![DOI](https://zenodo.org/badge/1066966722.svg)](https://doi.org/10.5281/zenodo.20037764)
 
 
 ## Introduction
