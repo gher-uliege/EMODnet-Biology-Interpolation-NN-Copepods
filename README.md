@@ -75,7 +75,6 @@ To create the gridded maps we will rely on [`DINCAE`](https://github.com/gher-ul
 ## Data series
 
 Raw data have to be downloaded from https://doi.mba.ac.uk/data/3548/
-
 and then extracted in the corresponding directory (`./data/raw_data/`)
 ```bash
 unzip CPR_DataRequest_DINCAE_29Sep25.zip
@@ -165,13 +164,13 @@ Copyright (c) 2025 ULiège (GHER)
 ## Procedure
 
 1. Download the data file from https://doi.org/10.17031/68da4a97650f1.
-   ><details>   
+   <details>   
+
    The zip file has to be extracted in the corresponding directory (`./data/raw_data/`). Three files are obtained: 
    1. `CPR_Data_DINCAE_290925.docx`: the documentation,
    2. `CPR_DINCAE_ControlMap_29092025.png`: a map representing the selected samples,
-   3. `CPR_DINCAE_Data_290925.csv`: the selected samples.
-
-  </details>
+   3. `CPR_DINCAE_Data_290925.csv`: the selected samples. 
+   </details>
 
 2. Edit and run `read_copepods_data.ipynb` to convert the CSV to netCDF files.
    <details>
@@ -191,9 +190,9 @@ Copyright (c) 2025 ULiège (GHER)
    - distance to nearest coastline and 
    - sea surface temperature.
   Other variables can be considered (depending on the application).
+    </details>
    
 5. Run the script `run_DINCAE_random_copepods.jl` to generate analysis with a random set of _hyperparameters_. 
-
     <details>
 
     > [!NOTE]
@@ -202,5 +201,12 @@ Copyright (c) 2025 ULiège (GHER)
     ```julia
     ┌ Warning: No supported GPU found. We will use the CPU which is very slow. Please check https://developer.nvidia.com/cuda-gpus
     ```
+    </details>
 
-  </details>
+6. Run the script `find_best_param.jl` to find the combination of hyperparameters and environment variables that yield the best results.
+
+7. Run the script `run_best_params.jl` to generate the _best_ analysis using the full dataset.
+
+## Acknowledgements
+
+Computational resources have been provided by the Consortium des Équipements de Calcul Intensif ([CÉCI](https://www.ceci-hpc.be/)), funded by the Fonds de la Recherche Scientifique de Belgique ([F.R.S.-FNRS](https://frs-fnrs.be)) under Grant No. 2.5020.11 and by the Walloon Region.
