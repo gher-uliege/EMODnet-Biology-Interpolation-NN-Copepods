@@ -94,7 +94,7 @@ Three files are obtained:
 
 The data product consists of a netCDF file storing gridded fields for two variables: the _small copepods_ and the _large copepods_.
 
-## More information:
+## More information
 
 ### References
 

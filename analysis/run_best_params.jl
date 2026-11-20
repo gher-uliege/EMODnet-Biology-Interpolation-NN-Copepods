@@ -14,11 +14,15 @@ using NCDatasets
 using LinearAlgebra
 using Statistics
 
-# varname = "Small_copepods"
-# expdirbest = "20260325T184717"
+#varname = "Small_copepods"
+#expdirbest = "20260325T184717"
+#expdirbest = "20260408T030249"
 
 varname = "Large_copepods"
-expdirbest = "20260408T073427"
+expdirbest = "20260405T130521"
+
+# Large_copepods_20260405T130521_bathy_sst.nc
+# Small_copepods_20260325T184717_bathy.nc
 
 #   Set the correct variable types
 #   ================================
@@ -72,7 +76,6 @@ close(ds);
 function read_params(paramfile::AbstractString)
     ds = NCDataset(paramfile)
     
-
     paramdictopti = Dict(
         :learning_rate                 => ds.attrib["learning_rate"],
         :epochs                        => ds.attrib["epochs"],
@@ -90,7 +93,7 @@ paramdictopti = read_params(paramfile)
 # 1. Base run
 # -----------
 
-outputfile = joinpath(outputdir, "$(varname)_best.nc")
+#= outputfile = joinpath(outputdir, "$(varname)_best.nc")
 paramfileout = joinpath(outputdir, "$(varname)_best_params.nc")
 
 theloss = DINCAE.reconstruct_points(
@@ -120,7 +123,7 @@ bias = mean(fieldiff);
 nc2 = NCDataset(outputfile, "a")
 nc2.attrib["RMSE"] = rmse
 nc2.attrib["bias"] = bias
-close(nc2);
+close(nc2); =#
 
 # 2. Run with bathymetry
 # ----------------------
@@ -165,7 +168,7 @@ nc2 = NCDataset(outputfile, "a")
 nc2.attrib["RMSE"] = rmse
 nc2.attrib["bias"] = bias
 close(nc2);
-
+#= 
 # 3. Run with SST
 # ---------------
 
@@ -363,3 +366,4 @@ nc2.attrib["RMSE"] = rmse
 nc2.attrib["bias"] = bias
 close(nc2);
 
+ =#

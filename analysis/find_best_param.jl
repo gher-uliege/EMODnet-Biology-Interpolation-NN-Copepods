@@ -23,7 +23,7 @@ enable_autoformat()
 #   Files and directories
 #   =====================
 
-# varname = "Small_copepods"
+#varname = "Small_copepods"
 varname = "Large_copepods"
 
 outputdir_optim = joinpath(outputdir, "param_optim/$(varname)")
@@ -50,6 +50,7 @@ for expdir in expdirlist
     global ndirproc += 1
     if length(resfilelist) == 7
         filter!(xx -> .!occursin("param", xx), resfilelist)
+
 
         for resfile in resfilelist
             _, RMS = CopepodsNN.get_field(joinpath(outputdir_optim, expdir, resfile), varname)
